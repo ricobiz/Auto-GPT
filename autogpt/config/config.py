@@ -65,6 +65,14 @@ class Config(metaclass=Singleton):
             openai.api_type = self.openai_api_type
             openai.api_base = self.openai_api_base
             openai.api_version = self.openai_api_version
+        else:
+            # Configure for OpenRouter if API key starts with sk-or-
+            if self.openai_api_key and self.openai_api_key.startswith('sk-or-'):
+                openai.api_base = "https://openrouter.ai/api/v1"
+            
+        # Set the API key for all OpenAI calls
+        if self.openai_api_key:
+            openai.api_key = self.openai_api_key
 
         self.elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY")
         self.elevenlabs_voice_1_id = os.getenv("ELEVENLABS_VOICE_1_ID")
